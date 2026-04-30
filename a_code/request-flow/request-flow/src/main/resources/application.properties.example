@@ -1,0 +1,6 @@
+quarkus.datasource.db-kind=mysql
+quarkus.datasource.username=seu_user
+quarkus.datasource.password=sua_senha
+quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/nome_do_banco
+
+quarkus.hibernate-orm.database.generation=update
