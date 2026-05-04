@@ -1,9 +1,6 @@
 package org.sfl.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.sfl.enums.Category;
 import org.sfl.enums.Priority;
 import org.sfl.enums.Status;
@@ -34,7 +31,9 @@ public class Request {
     private LocalDateTime updatedAt;
     private LocalDateTime resolvedAt;
 
+    @OneToMany
     private User requester;
 
+    @OneToMany
     private User assignedTo;
 }

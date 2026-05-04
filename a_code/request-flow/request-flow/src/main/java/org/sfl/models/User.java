@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import org.sfl.enums.Role;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "User")
@@ -27,4 +28,5 @@ public class User {
 
 	private Integer loginTry;
 
+	private Date birthDate;
 }
