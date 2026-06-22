@@ -1,0 +1,92 @@
+@if (currentUser()?.role === role.MANAGER) {
+  <app-manager-dashboard [dashboard]="managerDashboard()" />
+} @else {
+  <section class="dashboard">
+    <app-page-header
+      title="Dashboard"
+      subtitle="Fila de trabalho e alertas operacionais"
+    />
+
+    <section class="metric-grid" aria-label="Indicadores da fila de trabalho">
+      @for (metric of metrics(); track metric.label) {
+        <mat-card class="metric-card metric-card--{{ metric.tone }}">
+          <mat-card-content>
+            <div class="metric-card__icon">
+              <mat-icon aria-hidden="true">{{ metric.icon }}</mat-icon>
+            </div>
+            <div>
+              <span>{{ metric.label }}</span>
+              <strong>{{ metric.value }}</strong>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </section>
+
+    <section class="analyst-grid">
+      <mat-card class="dashboard-section">
+        <mat-card-header>
+          <mat-card-title>Minha fila de trabalho</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (analystWorkQueue().length) {
+            <mat-list>
+              @for (request of analystWorkQueue(); track request.id) {
+                <mat-list-item
+                  class="request-row"
+                  [class.request-row--overdue]="isOverdue(request)"
+                  [class.request-row--critical]="request.priority === priority.CRITICAL || request.priority === priority.HIGH"
+                >
+                  <mat-icon matListItemIcon aria-hidden="true">
+                    {{ isOverdue(request) ? 'warning' : 'assignment' }}
+                  </mat-icon>
+                  <div matListItemTitle>{{ request.title }}</div>
+                  <div matListItemLine>
+                    {{ priorityLabel(request.priority) }} · {{ statusLabel(request.status) }} · entrega
+                    {{ request.dueDate | date: 'dd/MM/yyyy' }}
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          } @else {
+            <app-empty-state
+              icon="assignment_turned_in"
+              title="Nenhuma solicitação atribuída"
+              message="Ao assumir solicitações abertas, elas aparecerão nesta fila."
+            />
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="dashboard-section">
+        <mat-card-header>
+          <mat-card-title>Alertas de SLA</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (analystQueue().length) {
+            <mat-list>
+              @for (request of analystQueue(); track request.id) {
+                <mat-list-item class="request-row" [class.request-row--overdue]="isOverdue(request)">
+                  <mat-icon matListItemIcon aria-hidden="true">
+                    {{ isOverdue(request) ? 'warning' : 'priority_high' }}
+                  </mat-icon>
+                  <div matListItemTitle>{{ request.title }}</div>
+                  <div matListItemLine>
+                    {{ priorityLabel(request.priority) }} · data de entrega
+                    {{ request.dueDate | date: 'dd/MM/yyyy' }}
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          } @else {
+            <app-empty-state
+              icon="task_alt"
+              title="Nenhum alerta de SLA"
+              message="Solicitações críticas, altas ou vencidas serão destacadas aqui."
+            />
+          }
+        </mat-card-content>
+      </mat-card>
+    </section>
+  </section>
+}

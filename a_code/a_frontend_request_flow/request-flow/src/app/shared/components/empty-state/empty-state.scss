@@ -1,0 +1,21 @@
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 16px;
+  color: #5c667a;
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  color: #0b1f3a;
+}
+
+.empty-state strong {
+  color: #152238;
+}
+
+.empty-state p {
+  max-width: 420px;
+  margin: 0;
+}

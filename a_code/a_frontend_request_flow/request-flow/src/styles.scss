@@ -1,0 +1,29 @@
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: #f5f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+.mat-mdc-card {
+  border-radius: 8px;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+button mat-icon,
+a mat-icon {
+  margin-right: 6px;
+}

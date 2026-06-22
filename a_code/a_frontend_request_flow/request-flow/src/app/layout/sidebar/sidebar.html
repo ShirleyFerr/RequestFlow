@@ -1,0 +1,97 @@
+<aside class="sidebar" [class.sidebar--collapsed]="collapsed">
+  <div class="sidebar__brand">
+    <mat-icon aria-hidden="true">stream</mat-icon>
+    @if (!collapsed) {
+      <span>RequestFlow</span>
+    }
+    @if (showCollapseButton) {
+      <button
+        matIconButton
+        type="button"
+        class="sidebar__collapse"
+        [attr.aria-label]="collapsed ? 'Expandir menu' : 'Recolher menu'"
+        [matTooltip]="collapsed ? 'Expandir menu' : 'Recolher menu'"
+        (click)="toggleCollapsed.emit()"
+      >
+        <mat-icon aria-hidden="true">{{ collapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </button>
+    }
+  </div>
+
+  <mat-nav-list class="sidebar__nav">
+    @if (currentUser(); as user) {
+      @if (permissionService.canAccessDashboard(user.role)) {
+        <a
+          mat-list-item
+          routerLink="/dashboard"
+          routerLinkActive="sidebar__link--active"
+          [matTooltip]="collapsed ? 'Dashboard' : ''"
+          (click)="navigate.emit()"
+        >
+          <mat-icon matListItemIcon aria-hidden="true">dashboard</mat-icon>
+          @if (!collapsed) {
+            <span matListItemTitle>Dashboard</span>
+          }
+        </a>
+      }
+
+      <a
+        mat-list-item
+        routerLink="/requests"
+        routerLinkActive="sidebar__link--active"
+        [matTooltip]="collapsed ? permissionService.getRequestsTitleByRole(user.role) : ''"
+        (click)="navigate.emit()"
+      >
+        <mat-icon matListItemIcon aria-hidden="true">assignment</mat-icon>
+        @if (!collapsed) {
+          <span matListItemTitle>{{ permissionService.getRequestsTitleByRole(user.role) }}</span>
+        }
+      </a>
+
+      @if (permissionService.canCreateRequest(user.role)) {
+        <a
+          mat-list-item
+          routerLink="/requests/new"
+          routerLinkActive="sidebar__link--active"
+          [matTooltip]="collapsed ? 'Nova solicitacao' : ''"
+          (click)="navigate.emit()"
+        >
+          <mat-icon matListItemIcon aria-hidden="true">add_circle</mat-icon>
+          @if (!collapsed) {
+            <span matListItemTitle>Nova solicitacao</span>
+          }
+        </a>
+      }
+
+      @if (permissionService.canAccessUsers(user.role)) {
+        <a
+          mat-list-item
+          routerLink="/users"
+          routerLinkActive="sidebar__link--active"
+          [matTooltip]="collapsed ? 'Usuarios' : ''"
+          (click)="navigate.emit()"
+        >
+          <mat-icon matListItemIcon aria-hidden="true">group</mat-icon>
+          @if (!collapsed) {
+            <span matListItemTitle>Usuarios</span>
+          }
+        </a>
+      }
+    }
+  </mat-nav-list>
+
+  <div class="sidebar__footer">
+    <button
+      matButton
+      type="button"
+      class="sidebar__logout"
+      matTooltip="Encerrar sessao"
+      (click)="logout()"
+    >
+      <mat-icon aria-hidden="true">logout</mat-icon>
+      @if (!collapsed) {
+        <span>Sair</span>
+      }
+    </button>
+  </div>
+</aside>

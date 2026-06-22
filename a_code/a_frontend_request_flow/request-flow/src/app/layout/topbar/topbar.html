@@ -1,0 +1,25 @@
+<mat-toolbar class="topbar">
+  @if (showMenuButton) {
+    <button matIconButton type="button" aria-label="Abrir menu" (click)="toggleSidebar.emit()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+
+  <span class="topbar__title">Portal interno</span>
+  <span class="topbar__spacer"></span>
+
+  @if (currentUser(); as user) {
+    <button matButton [matMenuTriggerFor]="userMenu" class="topbar__user">
+      <span>{{ user.name }}</span>
+      <span class="topbar__role">{{ user.role }}</span>
+      <mat-icon aria-hidden="true">expand_more</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item type="button" (click)="logout()">
+        <mat-icon aria-hidden="true">logout</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
+  }
+</mat-toolbar>

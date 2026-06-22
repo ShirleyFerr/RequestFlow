@@ -1,0 +1,25 @@
+.users {
+  display: grid;
+  gap: 20px;
+}
+
+.users-card {
+  border: 1px solid #dce3ef;
+  box-shadow: none;
+}
+
+.users-card mat-card-content {
+  padding: 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 860px;
+}
+
+@media (max-width: 640px) {
+}

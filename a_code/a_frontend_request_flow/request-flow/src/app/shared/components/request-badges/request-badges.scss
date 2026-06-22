@@ -1,0 +1,42 @@
+.request-badge {
+  min-height: 26px;
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+
+.request-badge--status-open,
+.request-badge--sla-ok {
+  --mdc-chip-elevated-container-color: #eaf1fb;
+  --mdc-chip-label-text-color: #0b1f3a;
+}
+
+.request-badge--status-in_progress,
+.request-badge--status-waiting_info,
+.request-badge--sla-near {
+  --mdc-chip-elevated-container-color: #fff4db;
+  --mdc-chip-label-text-color: #9a5b00;
+}
+
+.request-badge--status-resolved {
+  --mdc-chip-elevated-container-color: #e7f6ec;
+  --mdc-chip-label-text-color: #087443;
+}
+
+.request-badge--status-cancelled,
+.request-badge--sla-closed {
+  --mdc-chip-elevated-container-color: #eef1f6;
+  --mdc-chip-label-text-color: #667085;
+}
+
+.request-badge--priority-low,
+.request-badge--priority-medium {
+  --mdc-chip-elevated-container-color: #eef1f6;
+  --mdc-chip-label-text-color: #4b4f5c;
+}
+
+.request-badge--priority-high,
+.request-badge--priority-critical,
+.request-badge--sla-overdue {
+  --mdc-chip-elevated-container-color: #fde8e8;
+  --mdc-chip-label-text-color: #b42318;
+}

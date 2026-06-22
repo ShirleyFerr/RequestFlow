@@ -1,0 +1,16 @@
+.user-form {
+  display: grid;
+  min-width: min(520px, 82vw);
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.password-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #eaf1fb;
+  color: #0b1f3a;
+}

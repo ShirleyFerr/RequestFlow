@@ -1,0 +1,34 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  gap: 8px;
+  background: #0b1f3a;
+  color: #ffffff;
+}
+
+.topbar__title {
+  font-weight: 600;
+}
+
+.topbar__spacer {
+  flex: 1 1 auto;
+}
+
+.topbar__user {
+  max-width: min(56vw, 360px);
+}
+
+.topbar__role {
+  opacity: 0.78;
+}
+
+@media (max-width: 560px) {
+  .topbar__title {
+    display: none;
+  }
+
+  .topbar__user {
+    max-width: 72vw;
+  }
+}

@@ -1,0 +1,166 @@
+@if (request(); as request) {
+  <section class="detail">
+    <header class="detail__header">
+      <div>
+        <a matButton="outlined" routerLink="/requests">
+          <mat-icon aria-hidden="true">arrow_back</mat-icon>
+          Voltar
+        </a>
+        <h1>{{ request.title }}</h1>
+        <p>{{ request.id }}</p>
+      </div>
+
+      <div class="detail__actions">
+        <app-status-badge [status]="request.status" />
+        @if (canAssume(request)) {
+          <button matButton="outlined" type="button" (click)="assumeRequest()">
+            <mat-icon aria-hidden="true">assignment_ind</mat-icon>
+            Assumir solicitação
+          </button>
+        }
+        @if (canUpdateStatus(request)) {
+          <button matButton="filled" type="button" (click)="openStatusDialog()">
+            <mat-icon aria-hidden="true">edit_square</mat-icon>
+            Atualizar status
+          </button>
+        }
+        @if (canReassign(request)) {
+          <button matButton="outlined" type="button" (click)="openReassignDialog()">
+            <mat-icon aria-hidden="true">manage_accounts</mat-icon>
+            Reatribuir responsável
+          </button>
+        }
+      </div>
+    </header>
+
+    <div class="detail__grid">
+      <div class="detail__main">
+        <mat-card class="panel">
+          <mat-card-header>
+            <mat-card-title>Dados principais</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="description">{{ request.description }}</p>
+
+            <div class="badge-row">
+              <app-priority-badge [priority]="request.priority" />
+              <mat-chip>{{ categoryLabel(request.category) }}</mat-chip>
+              <app-sla-badge [state]="slaState(request)" />
+            </div>
+
+            @if (request.aiSuggestion) {
+              <mat-divider />
+              <section class="ai-summary">
+                <h2>Resumo da IA</h2>
+                <p>{{ request.aiSuggestion.summary }}</p>
+              </section>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="panel">
+          <mat-card-header>
+            <mat-card-title>Comentarios</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (request.comments.length) {
+              <div class="timeline">
+                @for (comment of request.comments; track comment.id) {
+                  <article class="timeline__item">
+                    <strong>{{ comment.author.name }}</strong>
+                    <span>{{ comment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                    <p>{{ comment.message }}</p>
+                  </article>
+                }
+              </div>
+            } @else {
+              <app-empty-state
+                icon="chat_bubble_outline"
+                title="Nenhum comentário registrado"
+                message="Os comentários adicionados aparecerão aqui."
+              />
+            }
+
+            @if (canAddComment(request)) {
+              <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="addComment()">
+                <mat-form-field appearance="outline">
+                  <mat-label>Novo comentário</mat-label>
+                  <textarea matInput rows="3" formControlName="message"></textarea>
+                  @if (commentForm.controls.message.hasError('required')) {
+                    <mat-error>Escreva um comentário antes de enviar.</mat-error>
+                  }
+                </mat-form-field>
+                <button matButton="filled" type="submit">
+                  <mat-icon aria-hidden="true">send</mat-icon>
+                  Comentar
+                </button>
+              </form>
+            } @else {
+              <p class="readonly-note">Solicitação cancelada: comentários e edições bloqueados.</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <aside class="detail__side">
+        <mat-card class="panel">
+          <mat-card-header>
+            <mat-card-title>Metadados</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <dl class="metadata">
+              <div>
+                <dt>Solicitante</dt>
+                <dd>{{ request.requester.name }}</dd>
+              </div>
+              <div>
+                <dt>Responsável</dt>
+                <dd>{{ request.assignedTo?.name ?? 'Não atribuído' }}</dd>
+              </div>
+              <div>
+                <dt>Criação</dt>
+                <dd>{{ request.createdAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+              </div>
+              <div>
+                <dt>Atualização</dt>
+                <dd>{{ request.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+              </div>
+              <div class="metadata__due">
+                <dt>Data de entrega</dt>
+                <dd>{{ request.dueDate | date: 'dd/MM/yyyy' }}</dd>
+              </div>
+              @if (request.resolvedAt) {
+                <div>
+                  <dt>Resolução</dt>
+                  <dd>{{ request.resolvedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                </div>
+              }
+            </dl>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="panel">
+          <mat-card-header>
+            <mat-card-title>Histórico de status</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="timeline">
+              @for (item of orderedHistory(); track item.id) {
+                <article class="timeline__item">
+                  <strong>{{ statusLabel(item.toStatus) }}</strong>
+                  <span>{{ item.changedAt | date: 'dd/MM/yyyy HH:mm' }} · {{ item.changedBy.name }}</span>
+                  @if (item.fromStatus) {
+                    <p>De {{ statusLabel(item.fromStatus) }} para {{ statusLabel(item.toStatus) }}</p>
+                  }
+                  @if (item.note) {
+                    <p>{{ item.note }}</p>
+                  }
+                </article>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </aside>
+    </div>
+  </section>
+}

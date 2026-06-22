@@ -1,0 +1,30 @@
+.layout {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.layout__sidenav {
+  width: 264px;
+  border-right: 1px solid #d7dde8;
+  background: #ffffff;
+  transition: width 180ms ease;
+}
+
+.layout__sidenav--collapsed {
+  width: 84px;
+}
+
+.layout__content {
+  min-height: 100vh;
+}
+
+.layout__main {
+  min-height: calc(100vh - 64px);
+  padding: 24px;
+}
+
+@media (max-width: 720px) {
+  .layout__main {
+    padding: 16px;
+  }
+}

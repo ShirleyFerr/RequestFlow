@@ -1,0 +1,107 @@
+.dashboard {
+  display: grid;
+  gap: 24px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  border: 1px solid #dce3ef;
+  box-shadow: none;
+}
+
+.metric-card mat-card-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.metric-card__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 8px;
+  background: #eaf1fb;
+  color: #0b1f3a;
+}
+
+.metric-card span {
+  display: block;
+  color: #5c667a;
+  font-size: 0.875rem;
+}
+
+.metric-card strong {
+  display: block;
+  color: #152238;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.metric-card--danger .metric-card__icon {
+  background: #fde8e8;
+  color: #b42318;
+}
+
+.metric-card--success .metric-card__icon {
+  background: #e7f6ec;
+  color: #087443;
+}
+
+.metric-card--warning .metric-card__icon {
+  background: #fff4db;
+  color: #9a5b00;
+}
+
+.dashboard-section {
+  border: 1px solid #dce3ef;
+  box-shadow: none;
+}
+
+.analyst-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.request-row--overdue {
+  color: #b42318;
+}
+
+.request-row--critical {
+  font-weight: 700;
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip-overdue {
+  --mdc-chip-label-text-color: #b42318;
+}
+
+@media (max-width: 1180px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 920px) {
+  .analyst-grid {
+    grid-template-columns: 1fr;
+  }
+}

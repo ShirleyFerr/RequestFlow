@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Novo usuario</h2>
+
+<mat-dialog-content>
+  <form class="user-form" [formGroup]="userForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" />
+      @if (userForm.controls.name.hasError('required')) {
+      <mat-error>Informe o nome completo.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input matInput type="email" formControlName="email" />
+      @if (userForm.controls.email.hasError('required')) {
+      <mat-error>Informe o e-mail corporativo.</mat-error>
+      }
+      @if (userForm.controls.email.hasError('email')) {
+      <mat-error>Informe um e-mail válido.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Perfil</mat-label>
+      <mat-select formControlName="role">
+        @for (role of roleOptions; track role) {
+          <mat-option [value]="role">{{ roleLabel(role) }}</mat-option>
+        }
+      </mat-select>
+      @if (userForm.controls.role.hasError('required')) {
+      <mat-error>Selecione o perfil de acesso.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data de nascimento</mat-label>
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="birthDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker" />
+      <mat-datepicker #birthDatePicker />
+      @if (userForm.controls.birthDate.hasError('required')) {
+      <mat-error>Informe a data de nascimento.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-checkbox formControlName="active">Ativo</mat-checkbox>
+
+    <div class="password-note">
+      <mat-icon aria-hidden="true">info</mat-icon>
+      <span>A senha inicial será gerada a partir da data de nascimento.</span>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton="outlined" type="button" mat-dialog-close>Cancelar</button>
+  <button matButton="filled" type="button" (click)="save()">Salvar</button>
+</mat-dialog-actions>

@@ -1,0 +1,137 @@
+<section class="request-create">
+  <app-page-header
+    title="Nova solicitação"
+    subtitle="Abra uma solicitação interna com classificação manual ou sugestão de IA."
+  />
+
+  <div class="request-create__grid">
+    <mat-card class="request-card">
+      <mat-card-header>
+        <mat-card-title>Dados da solicitação</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form class="request-form" [formGroup]="requestForm" (ngSubmit)="save()">
+          <mat-form-field appearance="outline">
+            <mat-label>Título</mat-label>
+            <input matInput formControlName="title" />
+            @if (requestForm.controls.title.hasError('required')) {
+              <mat-error>Informe um título claro para a solicitação.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput formControlName="description" rows="6"></textarea>
+            @if (requestForm.controls.description.hasError('required')) {
+              <mat-error>Descreva o que precisa ser atendido.</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="request-form__row">
+            <mat-form-field appearance="outline">
+              <mat-label>Categoria</mat-label>
+              <mat-select formControlName="category">
+                @for (category of categoryOptions; track category) {
+                  <mat-option [value]="category">{{ categoryLabel(category) }}</mat-option>
+                }
+              </mat-select>
+              @if (requestForm.controls.category.hasError('required')) {
+                <mat-error>Informe a categoria.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Prioridade</mat-label>
+              <mat-select formControlName="priority">
+                @for (priority of priorityOptions; track priority) {
+                  <mat-option [value]="priority">{{ priorityLabel(priority) }}</mat-option>
+                }
+              </mat-select>
+              @if (requestForm.controls.priority.hasError('required')) {
+                <mat-error>Informe a prioridade.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data de entrega</mat-label>
+            <input matInput [matDatepicker]="dueDatePicker" [min]="minDueDate" formControlName="dueDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="dueDatePicker" />
+            <mat-datepicker #dueDatePicker />
+            @if (requestForm.controls.dueDate.hasError('required')) {
+              <mat-error>Informe a data de entrega.</mat-error>
+            }
+          </mat-form-field>
+
+          @if (requestForm.controls.aiSummary.value) {
+            <mat-form-field appearance="outline">
+              <mat-label>Resumo sugerido</mat-label>
+              <textarea matInput formControlName="aiSummary" rows="3"></textarea>
+            </mat-form-field>
+          }
+
+          <div class="request-form__actions">
+            <button matButton="outlined" type="button" [disabled]="isSuggesting" (click)="suggestWithAI()">
+              <mat-icon aria-hidden="true">auto_awesome</mat-icon>
+              {{ isSuggesting ? 'Sugerindo...' : 'Sugerir com IA' }}
+            </button>
+
+            <button matButton="filled" type="submit">
+              <mat-icon aria-hidden="true">save</mat-icon>
+              Salvar
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="suggestion-card">
+      <mat-card-header>
+        <mat-card-title>Sugestão de IA</mat-card-title>
+        <mat-card-subtitle>Sugestão do backend, editável após aplicar</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (suggestion) {
+          <dl class="suggestion">
+            <div>
+              <dt>Categoria sugerida</dt>
+              <dd>{{ categoryLabel(suggestion.category) }}</dd>
+            </div>
+            <div>
+              <dt>Prioridade sugerida</dt>
+              <dd>{{ priorityLabel(suggestion.priority) }}</dd>
+            </div>
+            <div>
+              <dt>Resumo</dt>
+              <dd>{{ suggestion.summary }}</dd>
+            </div>
+            @if (suggestion.source) {
+              <div>
+                <dt>Origem</dt>
+                <dd>{{ suggestion.source }}</dd>
+              </div>
+            }
+            @if (suggestion.confidence) {
+              <div>
+                <dt>Confiança</dt>
+                <dd>{{ suggestion.confidence | percent }}</dd>
+              </div>
+            }
+          </dl>
+
+          <button matButton="filled" type="button" (click)="applySuggestion()">
+            <mat-icon aria-hidden="true">check</mat-icon>
+            Aplicar sugestão
+          </button>
+        } @else {
+          <div class="suggestion-empty">
+            <mat-icon aria-hidden="true">psychology</mat-icon>
+            <p>Preencha título e descrição para gerar uma sugestão. Se a IA falhar, o formulário manual continua disponível.</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

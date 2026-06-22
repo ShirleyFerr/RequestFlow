@@ -1,0 +1,25 @@
+<mat-sidenav-container class="layout">
+  <mat-sidenav
+    #drawer
+    class="layout__sidenav"
+    [class.layout__sidenav--collapsed]="!isHandset() && isSidebarCollapsed()"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    [fixedInViewport]="isHandset()"
+  >
+    <app-sidebar
+      [collapsed]="!isHandset() && isSidebarCollapsed()"
+      [showCollapseButton]="!isHandset()"
+      (toggleCollapsed)="toggleSidebarCollapsed()"
+      (navigate)="isHandset() && drawer.close()"
+    />
+  </mat-sidenav>
+
+  <mat-sidenav-content class="layout__content">
+    <app-topbar [showMenuButton]="isHandset()" (toggleSidebar)="drawer.toggle()" />
+
+    <main class="layout__main">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

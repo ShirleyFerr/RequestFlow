@@ -1,0 +1,15 @@
+.login-page {
+  display: grid;
+  min-height: calc(100vh - 112px);
+  place-items: center;
+}
+
+.login-card {
+  width: min(100%, 420px);
+}
+
+.login-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}

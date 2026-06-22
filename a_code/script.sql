@@ -1,55 +1,56 @@
--- Criação do banco de dados RequestFlow
-CREATE DATABASE IF NOT EXISTS RequestFlow;
-USE RequestFlow;
+CREATE DATABASE IF NOT EXISTS requestflow;
 
--- Tabela de Usuários
-CREATE TABLE User (
-    idUser INT AUTO_INCREMENT PRIMARY KEY,
+USE requestflow;
+
+CREATE TABLE IF NOT EXISTS app_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    passwordHash VARCHAR(255) NOT NULL,
-    role VARCHAR(45) NOT NULL,
-    active TINYINT DEFAULT 1,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    email VARCHAR(180) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de Solicitações
-CREATE TABLE Request (
-    idRequest INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(45) NOT NULL,
-    description TEXT,
-    category VARCHAR(45),
-    priority VARCHAR(45),
-    status VARCHAR(45) NOT NULL,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    dueDate DATE,
-    resolvedAt DATETIME,
-    requesterId INT NOT NULL,
-    assigneeId INT,
-    FOREIGN KEY (requesterId) REFERENCES User(idUser) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (assigneeId) REFERENCES User(idUser) ON DELETE SET NULL ON UPDATE CASCADE
+CREATE TABLE IF NOT EXISTS internal_request (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(180) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(30) NOT NULL,
+    priority VARCHAR(20) NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    requester_id BIGINT NOT NULL,
+    assignee_id BIGINT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    due_date DATETIME NOT NULL,
+    resolved_at DATETIME,
+    ai_summary TEXT,
+
+    FOREIGN KEY (requester_id) REFERENCES app_user(id),
+    FOREIGN KEY (assignee_id) REFERENCES app_user(id)
 );
 
--- Tabela de Histórico de Status
-CREATE TABLE StatusHistory (
-    idStatusHistory INT AUTO_INCREMENT PRIMARY KEY,
-    requestId INT NOT NULL,
-    oldStatus VARCHAR(45),
-    newStatus VARCHAR(45) NOT NULL,
-    changedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    changedBy INT NOT NULL,
-    FOREIGN KEY (requestId) REFERENCES Request(idRequest) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (changedBy) REFERENCES User(idUser) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- Tabela de Comentários na Solicitação
-CREATE TABLE RequestComment (
-    idRequestComment INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS request_comment (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    request_id BIGINT NOT NULL,
+    author_id BIGINT NOT NULL,
     message TEXT NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    requestId INT NOT NULL,
-    authorId INT NOT NULL,
-    FOREIGN KEY (requestId) REFERENCES Request(idRequest) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (authorId) REFERENCES User(idUser) ON DELETE RESTRICT ON UPDATE CASCADE
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (request_id) REFERENCES internal_request(id),
+    FOREIGN KEY (author_id) REFERENCES app_user(id)
+);
+
+CREATE TABLE IF NOT EXISTS status_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    request_id BIGINT NOT NULL,
+    old_status VARCHAR(30),
+    new_status VARCHAR(30) NOT NULL,
+    changed_by_id BIGINT NOT NULL,
+    changed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    note TEXT,
+
+    FOREIGN KEY (request_id) REFERENCES internal_request(id),
+    FOREIGN KEY (changed_by_id) REFERENCES app_user(id)
 );
