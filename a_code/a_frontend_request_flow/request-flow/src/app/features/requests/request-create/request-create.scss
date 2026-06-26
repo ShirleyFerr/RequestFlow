@@ -64,6 +64,24 @@
   color: #5c667a;
 }
 
+.suggestion-loading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 16px;
+  color: #5c667a;
+}
+
+.suggestion-loading strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #152238;
+}
+
+.suggestion-loading p {
+  margin: 0;
+}
+
 .suggestion-empty mat-icon {
   color: #0b1f3a;
 }

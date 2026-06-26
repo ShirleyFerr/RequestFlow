@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,10 @@ public class User {
     @NotBlank
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
+
+    @NotNull
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -104,6 +109,14 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Role getRole() {

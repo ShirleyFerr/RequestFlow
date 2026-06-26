@@ -39,6 +39,10 @@ application.properties
 !application.properties.example
 !**/application.properties.example
 
+# Local agent/tooling metadata
+.agents/
+**/.agents/
+
 # Angular CLI and build artefacts
 /.angular-cli.json
 /.ng/

@@ -18,6 +18,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @ApplicationScoped
@@ -43,22 +44,29 @@ public class DevelopmentUserSeeder {
             return;
         }
 
-        User requester = createUserIfMissing("Usuario RequestFlow", "user@requestflow.com", Role.USER);
-        User analyst = createUserIfMissing("Analista RequestFlow", "analyst@requestflow.com", Role.ANALYST);
-        User manager = createUserIfMissing("Gestor RequestFlow", "manager@requestflow.com", Role.MANAGER);
-        User analystAlice = createUserIfMissing("Alice Moura", "alice@requestflow.com", Role.ANALYST);
-        User analystCarlos = createUserIfMissing("Carlos Melo", "carlos@requestflow.com", Role.ANALYST);
+        User requester = createUserIfMissing("Usuario RequestFlow", "user@requestflow.com", Role.USER, LocalDate.of(1995, 5, 10));
+        User analyst = createUserIfMissing("Analista RequestFlow", "analyst@requestflow.com", Role.ANALYST, LocalDate.of(1990, 8, 15));
+        User manager = createUserIfMissing("Gestor RequestFlow", "manager@requestflow.com", Role.MANAGER, LocalDate.of(1988, 3, 20));
+        User analystAlice = createUserIfMissing("Alice Moura", "alice@requestflow.com", Role.ANALYST, LocalDate.of(1992, 11, 4));
+        User analystCarlos = createUserIfMissing("Carlos Melo", "carlos@requestflow.com", Role.ANALYST, LocalDate.of(1989, 7, 22));
 
         seedRequests(requester, analyst, manager, analystAlice, analystCarlos);
     }
 
-    private User createUserIfMissing(String name, String email, Role role) {
+    private User createUserIfMissing(String name, String email, Role role, LocalDate birthDate) {
         return userRepository.findByEmail(email)
+                .map(existingUser -> {
+                    if (existingUser.getBirthDate() == null) {
+                        existingUser.setBirthDate(birthDate);
+                    }
+                    return existingUser;
+                })
                 .orElseGet(() -> {
                     User user = new User();
                     user.setName(name);
                     user.setEmail(email);
                     user.setPasswordHash(passwordService.hash(INITIAL_PASSWORD));
+                    user.setBirthDate(birthDate);
                     user.setRole(role);
                     user.setActive(true);
                     userRepository.persist(user);

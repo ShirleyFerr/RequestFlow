@@ -72,7 +72,13 @@
           }
 
           <div class="request-form__actions">
-            <button matButton="outlined" type="button" [disabled]="isSuggesting" (click)="suggestWithAI()">
+            <button
+              matButton="outlined"
+              type="button"
+              [disabled]="isSuggesting"
+              [attr.aria-busy]="isSuggesting"
+              (click)="suggestWithAI()"
+            >
               <mat-icon aria-hidden="true">auto_awesome</mat-icon>
               {{ isSuggesting ? 'Sugerindo...' : 'Sugerir com IA' }}
             </button>
@@ -93,7 +99,15 @@
       </mat-card-header>
 
       <mat-card-content>
-        @if (suggestion) {
+        @if (isSuggesting) {
+          <div class="suggestion-loading" aria-live="polite">
+            <mat-spinner diameter="28" />
+            <div>
+              <strong>Gerando sugestao...</strong>
+              <p>Estamos classificando a descricao. O preenchimento manual continua disponivel.</p>
+            </div>
+          </div>
+        } @else if (suggestion) {
           <dl class="suggestion">
             <div>
               <dt>Categoria sugerida</dt>

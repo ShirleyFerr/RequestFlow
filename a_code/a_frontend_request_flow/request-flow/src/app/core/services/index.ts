@@ -4,6 +4,7 @@ export * from './current-user.service';
 export * from './dashboard.service';
 export * from './page-title.service';
 export * from './permission.service';
+export * from './profile.service';
 export * from './request.service';
 export * from './token.service';
 export * from './user.service';

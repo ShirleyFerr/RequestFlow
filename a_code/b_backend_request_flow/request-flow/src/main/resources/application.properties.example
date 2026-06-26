@@ -21,7 +21,7 @@ quarkus.http.auth.permission.options.methods=OPTIONS
 quarkus.http.auth.permission.options.policy=permit
 quarkus.http.auth.permission.public.paths=/api/auth/login,/auth/login,/api/health/check,/health/check,/api/openapi,/openapi,/api/swagger-ui/*,/swagger-ui/*
 quarkus.http.auth.permission.public.policy=permit
-quarkus.http.auth.permission.authenticated-api.paths=/api/auth/me,/auth/me,/api/requests*,/requests*,/api/users*,/users*,/api/dashboard*,/dashboard*
+quarkus.http.auth.permission.authenticated-api.paths=/api/auth/me,/auth/me,/api/profile*,/profile*,/api/requests*,/requests*,/api/users*,/users*,/api/dashboard*,/dashboard*
 quarkus.http.auth.permission.authenticated-api.policy=authenticated
 
 quarkus.smallrye-openapi.path=/openapi

@@ -77,6 +77,19 @@
           }
         </a>
       }
+
+      <a
+        mat-list-item
+        routerLink="/profile"
+        routerLinkActive="sidebar__link--active"
+        [matTooltip]="collapsed ? 'Meu perfil' : ''"
+        (click)="navigate.emit()"
+      >
+        <mat-icon matListItemIcon aria-hidden="true">account_circle</mat-icon>
+        @if (!collapsed) {
+          <span matListItemTitle>Meu perfil</span>
+        }
+      </a>
     }
   </mat-nav-list>
 

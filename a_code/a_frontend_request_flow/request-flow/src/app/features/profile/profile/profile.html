@@ -1,0 +1,99 @@
+<section class="profile">
+  <app-page-header title="Meu perfil" subtitle="Dados da sua conta no RequestFlow" />
+
+  @if (loading) {
+    <app-loading label="Carregando perfil" />
+  } @else if (profile) {
+    <div class="profile__grid">
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <div mat-card-avatar class="profile-avatar">
+            {{ profile.name.slice(0, 2).toUpperCase() }}
+          </div>
+          <mat-card-title>{{ profile.name }}</mat-card-title>
+          <mat-card-subtitle>{{ profile.email }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          @if (refreshing) {
+            <p class="profile-card__refresh">Atualizando dados...</p>
+          }
+
+          <dl class="profile-data">
+            <div>
+              <dt>Perfil</dt>
+              <dd>{{ roleLabel(profile.role) }}</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{{ profile.active ? 'Ativo' : 'Inativo' }}</dd>
+            </div>
+            <div>
+              <dt>Criado em</dt>
+              <dd>{{ profile.createdAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+            </div>
+            <div>
+              <dt>Data de nascimento</dt>
+              <dd>{{ profile.birthDate | date: 'dd/MM/yyyy' }}</dd>
+            </div>
+          </dl>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="password-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar aria-hidden="true">lock_reset</mat-icon>
+          <mat-card-title>Senha</mat-card-title>
+          <mat-card-subtitle>Altere sua senha de acesso</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="password-card__hint">A senha atual nao e exibida por seguranca.</p>
+
+          @if (!showPasswordForm) {
+            <button matButton="filled" type="button" (click)="togglePasswordForm()">
+              <mat-icon aria-hidden="true">edit</mat-icon>
+              Editar senha
+            </button>
+          } @else {
+            <form class="password-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+              <mat-form-field appearance="outline">
+                <mat-label>Nova senha</mat-label>
+                <input matInput type="password" formControlName="newPassword" autocomplete="new-password" />
+                @if (passwordForm.controls.newPassword.hasError('required')) {
+                  <mat-error>Informe a nova senha.</mat-error>
+                }
+                @if (passwordForm.controls.newPassword.hasError('minlength')) {
+                  <mat-error>A senha deve ter pelo menos 6 caracteres.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Confirmar nova senha</mat-label>
+                <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password" />
+                @if (passwordForm.controls.confirmPassword.hasError('required')) {
+                  <mat-error>Confirme a nova senha.</mat-error>
+                }
+                @if (passwordForm.hasError('passwordsMismatch') && passwordForm.controls.confirmPassword.touched) {
+                  <mat-error>As senhas devem ser iguais.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-divider />
+
+              <div class="password-form__actions">
+                <button matButton="outlined" type="button" [disabled]="savingPassword" (click)="togglePasswordForm()">
+                  Cancelar
+                </button>
+                <button matButton="filled" type="submit" [disabled]="savingPassword">
+                  <mat-icon aria-hidden="true">save</mat-icon>
+                  Salvar senha
+                </button>
+              </div>
+            </form>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</section>

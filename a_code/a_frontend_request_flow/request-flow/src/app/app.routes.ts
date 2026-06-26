@@ -31,6 +31,10 @@ export const routes: Routes = [
         loadChildren: () => import('./features/requests/requests.routes').then((m) => m.REQUESTS_ROUTES),
       },
       {
+        path: 'profile',
+        loadChildren: () => import('./features/profile/profile.routes').then((m) => m.PROFILE_ROUTES),
+      },
+      {
         path: 'users',
         canActivate: [roleGuard],
         data: {

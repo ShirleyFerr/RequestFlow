@@ -58,7 +58,8 @@ public class UserService {
         user.setName(request.name());
         user.setEmail(request.email().toLowerCase());
         user.setRole(request.role());
-        user.setActive(request.active());
+        user.setBirthDate(request.birthDate());
+        user.setActive(request.active() != null ? request.active() : true);
         user.setPasswordHash(passwordService.hash(generateInitialPassword(request)));
 
         userRepository.persist(user);

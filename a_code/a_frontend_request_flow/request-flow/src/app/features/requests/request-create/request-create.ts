@@ -8,6 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -30,6 +31,7 @@ import { categoryLabel, priorityLabel } from '../../../shared/pipes';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     MatSnackBarModule,
     PageHeaderComponent,
@@ -63,6 +65,10 @@ export class RequestCreateComponent {
   });
 
   protected suggestWithAI(): void {
+    if (this.isSuggesting) {
+      return;
+    }
+
     const { title, description } = this.requestForm.getRawValue();
 
     if (!title.trim() || !description.trim()) {
@@ -75,6 +81,7 @@ export class RequestCreateComponent {
     }
 
     this.isSuggesting = true;
+    this.suggestion = null;
 
     this.aiService
       .suggestRequest({ title, description })

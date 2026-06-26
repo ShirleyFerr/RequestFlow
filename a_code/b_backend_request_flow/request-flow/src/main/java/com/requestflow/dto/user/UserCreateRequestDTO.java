@@ -26,7 +26,6 @@ public record UserCreateRequestDTO(
         @Past(message = "Data de nascimento deve estar no passado")
         LocalDate birthDate,
 
-        @NotNull(message = "Indicador de usuario ativo e obrigatorio")
         Boolean active
 ) {
 }
